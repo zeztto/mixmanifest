@@ -1,0 +1,28 @@
+name: CI
+
+"on":
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check Swift toolchain
+        run: swift --version
+      - name: Test synthetic fixtures
+        run: swift run --scratch-path .build/ci CoreChecks
+      - name: Build macOS application
+        run: swift build --scratch-path .build/ci --product MixManifest

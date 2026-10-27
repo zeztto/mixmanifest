@@ -1,0 +1,11 @@
+.DS_Store
+.build/
+.swiftpm/
+dist/
+.private/
+*.logicx/
+*.json
+*.txt
+!THIRD_PARTY_LICENSES/*.txt
+.env
+.env.*
